@@ -29,3 +29,21 @@ Snapshot: 23 October 2026 (portfolio extract cutoff 17 October; progress period 
 `snapshot_date,regional,area,branch,borrower_id,dpd,ntb_etb,current_flag,paid_flag,due_amount,paid_amount,outstanding`
 
 `dpd` is the worst `dpd_new` across the borrower's loans; `outstanding` and `paid_amount` are summed across the borrower's loans. Borrower IDs are pseudonymized.
+
+
+## Dua segmentasi dashboard
+- **Repayment / Portfolio Quality**: Current Paid, DPD aging, outstanding, RR DPD 0, % Mitra Paid, PQI, serta breakdown portfolio.
+- **Disbursement**: status Sudah Cair/Gagal Dicairkan/Menunggu Pencairan, New Loan vs Subsequent Loan, POI NTB funnel, prospek NTB dan ETB berminat, serta detail per branch.
+
+File disbursement agregat yang digunakan di browser ada di `data/daily_kp_by_branch.csv`, `data/poi_ntb_funnel_by_branch.csv`, `data/ntb_interested_by_branch.csv`, dan `data/etb_interested_by_branch.csv`. File agregat ini tidak memuat nama, NIK, alamat, atau nomor telepon. Filter Regional/Area/Branch diterapkan pada kedua segmentasi.
+
+
+## Repayment table and PQI (updated)
+- Repayment table separates DPD 0, DPD 1–30, DPD 31–60, DPD 61–90, and DPD 90+.
+- Paid rate is calculated as unique Mitra with `paid_flag = 1` divided by unique Mitra in that DPD bucket.
+- Target paid rates: DPD 0 = 98%, DPD 1–30 = 55%, DPD 31–60 = 15%.
+- Targets for DPD 61–90 and DPD 90+ were not provided and are intentionally left blank/editable in the dashboard.
+- Target Mitra Paid = ceiling(total Mitra in bucket × target). Gap = max(0, target Mitra Paid − actual Mitra Paid).
+- Total repayment is the sum of `paid_amount` from the uploaded snapshot. Validate the source period and payment definition before comparing daily performance.
+- PQI = 50% × RR DPD 0 + 50% × % Mitra Paid. RR DPD 0 = paid Mitra in DPD 0 / all Mitra in DPD 0. % Mitra Paid = paid Mitra in DPD 0–60 / all Mitra in DPD 0–60. Healthy threshold = 0.92.
+- Disbursement section now includes total disbursement amount and unique Mitra NOA, split into NTB (loan cycle 1) and ETB (loan cycle > 1), from Daily KP source.
