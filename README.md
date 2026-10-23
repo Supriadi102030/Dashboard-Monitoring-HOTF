@@ -1,49 +1,46 @@
 # Portfolio Quality Monitoring — Jawa 2
-Snapshot: 23 October 2026 (portfolio extract cutoff 17 October; progress period 18–23 October 2026).
+
+Static GitHub Pages dashboard with separate Repayment / Portfolio Quality and Disbursement views.
 
 ## Files
-- `index.html` — dashboard interface.
-- `app.js` — filter, CSV parsing, aggregation, DPD and preliminary paid metrics.
-- `portfolio_daily.csv` — pseudonymized borrower-level snapshot (26,172 unique borrowers). No names, phone numbers, NIK, addresses, customer numbers, or loan IDs.
-- `portfolio_daily_template.csv` — template for future daily updates.
-- `data/portfolio_branch_summary.csv` — aggregate branch-level portfolio metrics.
-- `data/poi_ntb_funnel_by_branch.csv` — aggregated POI/NTB lead funnel by branch.
-- `data/etb_interested_by_branch.csv` and `data/ntb_interested_by_branch.csv` — aggregated lead lists by branch.
-- `Analisis_Portfolio_Quality_Jawa2_23_Okt_2026.xlsx` — detailed analysis workbook.
+- `index.html`, `app.js`: dashboard interface and calculations.
+- `portfolio_daily.csv`: loan/portfolio snapshot, used for repayment buckets, PQI, and branch performance.
+- `data/disbursement_daily.csv`: branch-level daily disbursement, split into NTB and ETB.
+- `portfolio_daily_template.csv`: schema for updating repayment data.
+- `data/disbursement_daily_template.csv`: schema for updating disbursement data.
 
-## Important metric caveats
-1. The supplied portfolio files include current/DPD 1–30/31–60/61–90 extracts. There is no dedicated source extract for loans already in DPD 90+ at cutoff. The 639 loans that appear at DPD 90+ are only observed flows from the 61–90 extract; DPD 90+ is incomplete.
-2. `paid_flag` is derived from `payment_min_1x` (Yes/No) across a borrower's loans in the weekly reporting period. Treat it as a preliminary weekly payment indicator, not automatically the official % Mitra Paid metric.
-3. `due_amount` is set to 0 because the source files do not establish the official denominator for RR DPD 0. Therefore RR DPD 0 and PQI intentionally remain unavailable rather than using an unverified formula. Confirm the official amount due and payment window, then populate `due_amount`.
-4. Portfolio-level NTB/ETB is set to `UNCLASSIFIED`. Do not infer NTB/ETB from `loan_kind` alone. The lead-funnel files are separate and should not be added to portfolio borrower totals.
-5. The raw source spreadsheets contain personal data. Do not upload raw workbooks to a public GitHub repository. This package contains only pseudonymized borrower IDs and aggregated branch lead metrics.
+## Repayment / Branch Performance
+Branch table includes each DPD bucket, total Mitra/NOA, target paid rate, actual paid rate, and gap to target.
+- DPD 0 target paid: 98%
+- DPD 1–30 target paid: 55%
+- DPD 31–60 target paid: 15%
+- DPD 61–90 and DPD 90+: blank until management confirms the targets; can be entered in the dashboard.
+- `paid_flag=1` means the Mitra/loan has payment activity in the current monitoring period. Validate this flag against the official collection definition.
+- Gap NOA = max(0, ceiling(bucket NOA × target rate) − actual paid NOA).
+- PQI = 50% × RR DPD 0 + 50% × % Mitra Paid DPD 0–60; healthy cutoff is 0.92. In this dashboard, RR DPD 0 is calculated from Mitra paid rate (paid Mitra / total Mitra in DPD 0) because the supplied source snapshot does not contain a clean scheduled-amount denominator for official monetary repayment rate.
 
-## Dashboard update
-1. Replace the root `portfolio_daily.csv` with the latest sanitized CSV.
-2. Keep the CSV headers identical to `portfolio_daily_template.csv`.
-3. Commit the updated file to GitHub. The dashboard automatically fetches this CSV on page load; refresh the published page after deployment.
-4. CSV upload in the dashboard remains available for a temporary browser-only load.
-5. GitHub Pages should deploy from branch `main`, folder `/ (root)`.
+## Branch Performance Classification
+The rules follow the requested sequence:
+1. PQI > cut and NOA/BP > High → Aspiration
+2. PQI > cut and NOA/BP >= Low → Emerging Performer
+3. PQI > cut and NOA/BP < Low → Under Performing Sales
+4. PQI <= cut and NOA/BP >= Low → Under Performing Collection
+5. Otherwise → Need Turnaround
 
-## Required CSV columns
-`snapshot_date,regional,area,branch,borrower_id,dpd,ntb_etb,current_flag,paid_flag,due_amount,paid_amount,outstanding`
+Default thresholds in the dashboard are PQI cut = 0.92, NOA/BP Low = 700, and NOA/BP High = 1,000. These are editable assumptions and should be replaced with approved management thresholds. Because BP headcount is not included in the supplied portfolio file, the dashboard uses branch unique Mitra / the optional `bp_count` field if provided. Populate `bp_count` in the daily portfolio CSV for a true NOA per BP metric.
 
-`dpd` is the worst `dpd_new` across the borrower's loans; `outstanding` and `paid_amount` are summed across the borrower's loans. Borrower IDs are pseudonymized.
+## Disbursement
+- `total_disbursement_amount`: total plafond for loans with status “Sudah Cair”.
+- `total_disbursement_noa`: distinct `customer_number` among “Sudah Cair”.
+- NTB: source `kategori_cycle = New Loan`.
+- ETB: source `kategori_cycle = Subsequent Loan`.
+- NTB/ETB amounts sum `plafond` for the corresponding disbursed records.
+- These source categories may not match `loan_cycle` numerically. Use `kategori_cycle` as the classification field unless the business owner confirms another definition.
 
-
-## Dua segmentasi dashboard
-- **Repayment / Portfolio Quality**: Current Paid, DPD aging, outstanding, RR DPD 0, % Mitra Paid, PQI, serta breakdown portfolio.
-- **Disbursement**: status Sudah Cair/Gagal Dicairkan/Menunggu Pencairan, New Loan vs Subsequent Loan, POI NTB funnel, prospek NTB dan ETB berminat, serta detail per branch.
-
-File disbursement agregat yang digunakan di browser ada di `data/daily_kp_by_branch.csv`, `data/poi_ntb_funnel_by_branch.csv`, `data/ntb_interested_by_branch.csv`, dan `data/etb_interested_by_branch.csv`. File agregat ini tidak memuat nama, NIK, alamat, atau nomor telepon. Filter Regional/Area/Branch diterapkan pada kedua segmentasi.
-
-
-## Repayment table and PQI (updated)
-- Repayment table separates DPD 0, DPD 1–30, DPD 31–60, DPD 61–90, and DPD 90+.
-- Paid rate is calculated as unique Mitra with `paid_flag = 1` divided by unique Mitra in that DPD bucket.
-- Target paid rates: DPD 0 = 98%, DPD 1–30 = 55%, DPD 31–60 = 15%.
-- Targets for DPD 61–90 and DPD 90+ were not provided and are intentionally left blank/editable in the dashboard.
-- Target Mitra Paid = ceiling(total Mitra in bucket × target). Gap = max(0, target Mitra Paid − actual Mitra Paid).
-- Total repayment is the sum of `paid_amount` from the uploaded snapshot. Validate the source period and payment definition before comparing daily performance.
-- PQI = 50% × RR DPD 0 + 50% × % Mitra Paid. RR DPD 0 = paid Mitra in DPD 0 / all Mitra in DPD 0. % Mitra Paid = paid Mitra in DPD 0–60 / all Mitra in DPD 0–60. Healthy threshold = 0.92.
-- Disbursement section now includes total disbursement amount and unique Mitra NOA, split into NTB (loan cycle 1) and ETB (loan cycle > 1), from Daily KP source.
+## Daily update process
+1. Prepare new daily snapshots with the exact columns in the template CSV files.
+2. Replace `portfolio_daily.csv` in the repository root.
+3. Replace `data/disbursement_daily.csv` in the `data/` folder.
+4. Commit the changes to `main`.
+5. GitHub Pages loads the latest CSV when users open or refresh the dashboard. A CSV upload from inside the dashboard is preview-only and does not write to GitHub.
+6. Do not upload customer names, phone numbers, NIK, or other unnecessary personal information to a public repository. The provided dashboard CSV uses borrower/customer IDs for internal monitoring; if this repository is public, confirm approval or anonymize IDs before uploading.
