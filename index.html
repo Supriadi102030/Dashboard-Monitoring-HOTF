@@ -13,10 +13,10 @@
 <label class="field">Regional<select id="region"><option value="">Semua regional</option></select></label>
 <label class="field">Area<select id="area"><option value="">Semua area</option></select></label>
 <label class="field">Cabang<select id="branch"><option value="">Semua cabang</option></select></label>
-<label class="field">Segment<select id="segment"><option value="">NTB + ETB</option><option>NTB</option><option>ETB</option></select></label>
+<label class="field">Segment<select id="segment"><option value="">NTB + ETB</option><option>NTB</option><option>ETB</option><option value="UNCLASSIFIED">Belum diklasifikasi</option></select></label>
 <button id="download" class="secondary">Unduh template CSV</button>
 </section>
-<div id="notice" class="small" style="margin:0 0 14px">Belum ada data portofolio yang diunggah. Upload CSV snapshot harian untuk mulai monitoring. Data contoh sengaja tidak digunakan agar angka dashboard tidak menyesatkan.</div>
+<div id="notice" class="small" style="margin:0 0 14px">Belum ada data portofolio yang diunggah. Upload CSV snapshot harian untuk mulai monitoring. Data awal berasal dari snapshot Jawa 2 per 23 Okt 2026. RR DPD 0/PQI belum dihitung karena denominator tagihan resmi belum tersedia.</div>
 <section class="cards" id="cards"></section>
 <section class="grid2">
 <div class="panel"><h2>Distribusi DPD</h2><div id="dpdchart"></div></div>
@@ -24,6 +24,6 @@
 </section>
 <section class="panel"><h2>Perbandingan NTB vs ETB</h2><div class="scroll" id="segmenttable"></div></section>
 <section class="panel"><h2>Detail per cabang</h2><div class="scroll" id="detail"></div></section>
-<footer>Data dan hasil dihitung di browser Anda. Dashboard ini tidak mengirimkan data ke server. Pastikan definisi bisnis, DPD, dan paid flag sudah divalidasi sebelum digunakan untuk pelaporan resmi.</footer>
+<footer>Data dan hasil dihitung di browser Anda. Dashboard ini tidak mengirimkan data ke server. Data dihitung di browser. Data NTB/ETB portofolio belum terklasifikasi dan RR DPD 0/PQI belum tersedia sampai denominator resmi divalidasi.</footer>
 </main>
 <script src="app.js"></script></body></html>
