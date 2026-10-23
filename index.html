@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jawa 2 | Portfolio Quality Monitoring PQI</title>
+<style>
+:root{--ink:#291b2b;--muted:#756d78;--purple:#804b83;--pale:#f3eaf4;--line:#e5dfe7;--bg:#faf9fb;--green:#dff3e8;--red:#fde7e4;--amber:#fff1d8}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}header{background:#fff;padding:24px clamp(16px,3vw,40px);border-bottom:1px solid var(--line)}h1{margin:0;font-size:clamp(24px,3vw,34px)}h2{font-size:17px;margin:0 0 14px}.sub{color:var(--muted);margin-top:5px}.wrap{padding:22px clamp(16px,3vw,40px);max-width:1600px;margin:auto}.toolbar,.panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}.toolbar{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:5px;color:var(--muted);font-size:12px}input,select,button{font:inherit;padding:9px 11px;border:1px solid #d8d0dc;border-radius:8px;background:#fff;color:var(--ink)}button{background:var(--purple);color:white;border-color:var(--purple);font-weight:650;cursor:pointer}button.secondary{background:white;color:var(--purple)}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}.card{background:#fff;border:1px solid var(--line);border-radius:13px;padding:16px;min-width:0}.label{font-size:12px;color:var(--muted)}.value{font-size:27px;font-weight:750;margin:5px 0}.hint{font-size:12px;color:var(--muted)}.grid2{display:grid;grid-template-columns:1.15fr 1fr;gap:16px}.scroll{overflow:auto}table{border-collapse:collapse;width:100%;font-size:12px;white-space:nowrap}th,td{text-align:right;padding:10px;border-bottom:1px solid var(--line)}th{background:#faf7fb;color:#65596a;font-weight:700}th:first-child,td:first-child{text-align:left}.pill{padding:4px 8px;border-radius:20px;font-weight:700;display:inline-block}.healthy{background:var(--green);color:#23794f}.bad{background:var(--red);color:#a43c34}.warn{background:var(--amber);color:#8b6016}.empty{padding:24px;text-align:center;color:var(--muted)}.barrow{display:grid;grid-template-columns:90px 1fr 65px;gap:10px;align-items:center;margin:11px 0;font-size:12px}.track{height:11px;background:#eee8f0;border-radius:20px;overflow:hidden}.bar{height:100%;background:var(--purple);border-radius:20px}.small{font-size:12px;color:var(--muted)}footer{padding:10px 0 30px;color:var(--muted);font-size:12px}@media(max-width:900px){.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}@media(max-width:500px){.cards{grid-template-columns:1fr 1fr}.value{font-size:22px}}
+</style></head>
+<body><header><h1>Portfolio Quality Monitoring — Jawa 2</h1><div class="sub">Monitoring harian kualitas portofolio · Filter Regional, Area, dan Branch · NTB / ETB · DPD aging · PQI</div></header>
+<main class="wrap">
+<section class="toolbar">
+<label class="field">Upload data CSV<input type="file" id="file" accept=".csv"></label>
+<label class="field">Tanggal snapshot<select id="date"><option value="">Semua tanggal</option></select></label>
+<label class="field">Regional<select id="region"><option value="">Semua regional</option></select></label>
+<label class="field">Area<select id="area"><option value="">Semua area</option></select></label>
+<label class="field">Cabang<select id="branch"><option value="">Semua cabang</option></select></label>
+<label class="field">Segment<select id="segment"><option value="">NTB + ETB</option><option>NTB</option><option>ETB</option></select></label>
+<button id="download" class="secondary">Unduh template CSV</button>
+</section>
+<div id="notice" class="small" style="margin:0 0 14px">Belum ada data portofolio yang diunggah. Upload CSV snapshot harian untuk mulai monitoring. Data contoh sengaja tidak digunakan agar angka dashboard tidak menyesatkan.</div>
+<section class="cards" id="cards"></section>
+<section class="grid2">
+<div class="panel"><h2>Distribusi DPD</h2><div id="dpdchart"></div></div>
+<div class="panel"><h2>PQI & Collection</h2><div id="pqi"></div><div class="small">PQI = (50% × RR DPD 0) + (50% × % Mitra Paid). Target sehat mengikuti acuan: ≥ 0,92.</div></div>
+</section>
+<section class="panel"><h2>Perbandingan NTB vs ETB</h2><div class="scroll" id="segmenttable"></div></section>
+<section class="panel"><h2>Detail per cabang</h2><div class="scroll" id="detail"></div></section>
+<footer>Data dan hasil dihitung di browser Anda. Dashboard ini tidak mengirimkan data ke server. Pastikan definisi bisnis, DPD, dan paid flag sudah divalidasi sebelum digunakan untuk pelaporan resmi.</footer>
+</main>
+<script src="app.js"></script></body></html>
