@@ -30,3 +30,31 @@ Static dashboard for GitHub Pages built from the five daily Excel inputs:
 
 ## Daily refresh
 Replace `data/data.json` and the CSV summary files with freshly processed outputs from the latest five Excel files. The dashboard does not automatically ingest Excel files in GitHub Pages.
+
+
+## Tambahan BP Breakdown dan Target DPD
+- `data/data.json` kini mencakup agregasi per BP (`bps`) berdasarkan Regional, Area, Branch, dan nama/ID BP.
+- Target: DPD 0 = 98%; DPD 1–30 = 55%; DPD 31–60 = 13%.
+- Target Paid Mitra = pembulatan ke atas (mitra unik pada bucket × target).
+- Gap Mitra = maksimum(Target Paid Mitra − Paid Mitra, 0).
+- DPD 61–90 dan DPD 90+ tidak diberi target; pembayaran mitra ditampilkan sebagai kontribusi positif.
+- Paid Mitra dihitung sebagai customer_number unik dengan `payment_min_1x = Yes` pada bucket tersebut.
+- Data saat ini adalah snapshot 25–27 Oktober 2026. Perbandingan/pergerakan antar-minggu membutuhkan file snapshot dari minggu sebelumnya.
+- Sebelum mengunggah ke repository publik, pastikan nama/ID BP dan metrik operasional boleh dipublikasikan. Jika tidak, gunakan repository private atau hilangkan identitas BP.
+
+
+## Branch Performance, PQI, dan Status
+- Branch Performance dan BP Breakdown memakai header bertingkat: Total Pinjaman, Aktif/Terbayar, Rate, Gap, PQI.
+- PQI Branch = 50% × RR DPD 0 + 50% × RR DPD 0–60.
+- RR DPD 0–60 = total Paid NOA pada DPD 0, 1–30, dan 31–60 dibagi total NOA pada tiga bucket tersebut.
+- Status: PQI > 91,5% dan NOA/BP > 40 = Aspiration; PQI > 91,5% dan NOA/BP >= 15 = Emerging Performer; PQI > 91,5% dan NOA/BP < 15 = Under Perform Sale; PQI <= 91,5% dan NOA/BP >= 15 = Under Perform Collection; selain itu = Need Turnaround.
+- Perhitungan NOA/BP sementara menggunakan Active Loan / jumlah BP unik per branch karena file sumber portfolio tidak memuat field NOA/BP resmi yang terverifikasi. Validasi sebelum digunakan sebagai klasifikasi resmi.
+
+
+## Daily Update (refresh dari Excel terbaru)
+ZIP juga menyertakan `update_daily.py`, `Update_Daily_Data.bat`, `requirements.txt`, dan folder `input`.
+1. Simpan lima file Excel terbaru ke folder `input` dengan nama persis: `current.xlsx`, `daily_kp.xlsx`, `31-60.xlsx`, `61-90.xlsx`, dan `90+.xlsx` (hapus/replace file placeholder jika ada).
+2. Jalankan `Update_Daily_Data.bat` di Windows. Script mengolah data dan memperbarui `Portfolio_Quality_Monitoring_GitHub/data/data.json`.
+3. Upload/replace folder `data` (minimal `data.json`) pada repository GitHub yang dipakai GitHub Pages.
+4. Tunggu deployment selesai lalu refresh dashboard.
+Catatan: GitHub Pages bersifat static dan tidak bisa menulis balik ke repository secara langsung dari browser. Karena itu, pembaruan tidak terjadi otomatis hanya dengan membuka dashboard. Script ini membuat proses refresh harian lebih mudah, tetapi pengguna tetap perlu mengunggah hasilnya ke GitHub. Jangan unggah data pribadi/PII ke repository publik.

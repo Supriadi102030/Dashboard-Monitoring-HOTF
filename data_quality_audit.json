@@ -34,5 +34,12 @@
   "branches_portfolio": 22,
   "branches_disbursement": 22,
   "snapshot_cutoff": "2026-10-24",
-  "week_progress": "2026-10-25 s/d 2026-10-27"
+  "week_progress": "2026-10-25 s/d 2026-10-27",
+  "bp_breakdown": {
+    "bp_rows": 130,
+    "target_dpd_0": 0.98,
+    "target_dpd_1_30": 0.55,
+    "target_dpd_31_60": 0.13,
+    "dpd_61_90_and_90_plus": "no target; paid mitra counted as positive contribution"
+  }
 }
