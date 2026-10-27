@@ -1,25 +1,32 @@
-# KPI FO Tracker — Q4 2026 (GitHub Pages)
+# Portfolio Quality Monitoring — Jawa 2
 
-Dashboard statis berbasis HTML/CSS/JavaScript dengan data hasil ekstraksi dari sheet `Oct - BP`, `Oct - BM`, `Oct - AM`, dan `Oct - RM` pada workbook KPI FO Tracker.
+Static dashboard for GitHub Pages built from the five daily Excel inputs:
+- current_27 okt
+- daily kp_27 okt
+- 31-60_27 okt
+- 61-90_27 okt
+- 90+_27 okt
 
-## Cara upload ke GitHub
-1. Buat repository GitHub. **Penting:** workbook berisi nama karyawan dan informasi kinerja internal. Gunakan repository **Private** atau sanitasi `data.json` sebelum memublikasikan ke repository publik.
-2. Extract ZIP ini, lalu upload semua isi folder ke root repository: `index.html`, `styles.css`, `app.js`, `data.json`, dan `README.md`.
-3. Buka **Settings → Pages**.
-4. Pada Build and deployment, pilih **Deploy from a branch**, branch `main`, folder `/ (root)`, lalu Save.
-5. Tunggu proses deployment dan buka URL GitHub Pages yang ditampilkan.
+## Upload to GitHub Pages
+1. Extract the ZIP.
+2. Upload the contents of this folder to the root of your GitHub repository.
+3. In Settings → Pages, select Deploy from a branch → `main` → `/(root)`.
+4. Open the published GitHub Pages URL.
 
-## Isi dashboard
-- Filter role, regional, area, point, dan pencarian nama.
-- KPI summary, distribusi skor, rata-rata per role, indikator repayment, watchlist, dan tabel performa.
-- Export hasil filter ke CSV.
+## Files
+- `index.html`: dashboard UI
+- `app.js`: charts, filters, aggregation display
+- `data/data.json`: branch-level portfolio and disbursement aggregates
+- `data/branch_summary.csv`: branch portfolio summary
+- `data/disbursement_by_branch.csv`: disbursement summary by branch
 
-## Pembaruan data
-`data.json` adalah dataset yang dibaca dashboard. Untuk memperbarui, ekstrak ulang data dari workbook terbaru ke struktur JSON yang sama lalu replace `data.json` di repository. Pastikan formula di sumber sudah direfresh sebelum ekspor; dashboard tidak menghitung ulang formula Excel.
+## Data logic
+- The four DPD files are combined and deduplicated by `loan_id`; when duplicate IDs exist, the current file takes precedence.
+- Current DPD bucket is determined by `dpd_new`, not by the filename.
+- Loans with `loan_state = CLOSED` are excluded from Active Loan headline metrics.
+- `Paid NOA` uses `payment_min_1x = Yes`; the dashboard's RR flag is Paid NOA / Active NOA and is a provisional indicator, not guaranteed to match the official RR definition.
+- Disbursement status and plafond come from the Daily KP file. Pipeline plafond must not be interpreted as fully disbursed amount.
+- Data is aggregated to branch level; customer names, phone numbers, and customer identifiers are not included in the dashboard JSON.
 
-## Catatan interpretasi
-- Data diambil dari nilai tersimpan (cached values) workbook; beberapa formula eksternal/Google Sheets mungkin belum ter-refresh di Excel.
-- Dashboard date pada workbook: 2026-10-21; cutoff data: 2026-10-24.
-- Rata-rata repayment yang ditampilkan merupakan rata-rata sederhana dari nilai aktual per karyawan yang tersedia; untuk pelaporan resmi, sebaiknya hitung ulang dari numerator/denominator resmi, bukan merata-ratakan rate.
-- Parameter repayment DPD 31–90 di workbook memiliki definisi yang perlu dikonfirmasi karena deskripsinya menyebut DPD 31–60.
-- Data insentif tidak disimulasikan sebagai pembayaran final. Kartu Boom/Boost hanya menampilkan status pada sumber.
+## Daily refresh
+Replace `data/data.json` and the CSV summary files with freshly processed outputs from the latest five Excel files. The dashboard does not automatically ingest Excel files in GitHub Pages.

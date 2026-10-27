@@ -1,0 +1,38 @@
+{
+  "source_files": {
+    "current": {
+      "file": "current_27 okt_20261027_004057.xlsx",
+      "rows": 34988,
+      "columns": 37
+    },
+    "disbursement": {
+      "file": "daily kp_27 okt_20261027_004831.xlsx",
+      "rows": 5329,
+      "columns": 31
+    },
+    "dpd31_60": {
+      "file": "31-60_27 okt_20261027_004951.xlsx",
+      "rows": 2083,
+      "columns": 37
+    },
+    "dpd61_90": {
+      "file": "61-90_27 okt_20261027_005240.xlsx",
+      "rows": 3265,
+      "columns": 37
+    },
+    "dpd90_plus": {
+      "file": "90+_27 okt_20261027_005901.xlsx",
+      "rows": 34422,
+      "columns": 37
+    }
+  },
+  "dpd_source_rows_total": 74758,
+  "deduped_unique_loan_ids": 74758,
+  "duplicate_loan_ids_in_input": 0,
+  "active_loans": 74602,
+  "closed_loans_excluded": 156,
+  "branches_portfolio": 22,
+  "branches_disbursement": 22,
+  "snapshot_cutoff": "2026-10-24",
+  "week_progress": "2026-10-25 s/d 2026-10-27"
+}
