@@ -25,19 +25,19 @@
 <div class="filter"><label>Cari Branch</label><input id="search" placeholder="Ketik nama cabang..."></div>
 </section>
 <section class="cards" id="cards"></section>
-<div class="tabs"><button class="tab active" data-tab="quality">Portfolio Quality & Repayment</button><button class="tab" data-tab="disb">Disbursement Monitoring</button></div>
+<div class="tabs"><button class="tab active" data-tab="quality">Portfolio Quality & Repayment</button><button class="tab" data-tab="disb">Disbursement Monitoring</button><button class="tab" data-tab="upload">Upload Data Harian</button></div>
 <section id="quality">
 <div class="grid2">
 <div class="panel"><div class="section-head"><h2>Portfolio Distribution</h2><span class="tag">Active loan count</span></div><div class="desc">Jumlah pinjaman aktif per bucket berdasarkan dpd_new.</div><div class="chartbox"><canvas id="bucketChart"></canvas></div></div>
 <div class="panel"><div class="section-head"><h2>Repayment Indicator by Bucket</h2><span class="tag">Paid NOA / NOA</span></div><div class="desc">Indikator pembayaran berdasarkan payment_min_1x = Yes. Perlu validasi terhadap definisi RR resmi.</div><div class="chartbox"><canvas id="rrChart"></canvas></div></div>
 </div>
-<div class="panel"><div class="section-head"><h2>Branch Performance — Portfolio & Repayment</h2><span class="tag" id="branchCount">0 branch</span></div><div class="desc">Tampilan bertingkat mengikuti format performa BP: aktif, terbayar, rate per bucket, PQI Branch, NOA/BP, dan status klasifikasi. Nominal dalam Rupiah.</div><div class="table-wrap"><table><thead><tr><th rowspan="2">Regional</th><th rowspan="2">Area</th><th rowspan="2">Branch</th><th colspan="2">Total Pinjaman</th><th colspan="3">DPD 0<br><small>Target 98%</small></th><th colspan="3">DPD 1–30<br><small>Target 55%</small></th><th colspan="3">DPD 31–60<br><small>Target 13%</small></th><th colspan="2">DPD 61–90<br><small>Nilai +</small></th><th colspan="2">DPD 90+<br><small>Nilai +</small></th><th rowspan="2">PQI Branch</th><th rowspan="2">NOA/BP</th><th rowspan="2">Status Branch</th></tr><tr><th>Aktif</th><th>Terbayar</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Aktif</th><th>Terbayar (+)</th><th>Aktif</th><th>Terbayar (+)</th></tr></thead><tbody id="branchTable"></tbody></table></div><p class="notes">PQI Branch = 50% × RR DPD 0 + 50% × RR DPD 0–60. Status menggunakan cut-off PQI 91,5%; NOA/BP tinggi &gt;40 dan rendah ≥15. NOA/BP dihitung sementara sebagai Active Loan ÷ jumlah BP unik pada branch. Validasi metrik NOA/BP terhadap definisi resmi sebelum dipakai sebagai klasifikasi final.</p></div>
+<div class="panel"><div class="section-head"><h2>Branch Performance — Portfolio & Repayment</h2><span class="tag" id="branchCount">0 branch</span></div><div class="desc">Tampilan bertingkat mengikuti format performa BP: aktif, terbayar, rate per bucket, PQI Branch, NOA/BP, dan status klasifikasi. Nominal dalam Rupiah.</div><div class="table-wrap"><table><thead><tr><th rowspan="2">Status Branch</th><th rowspan="2">Regional</th><th rowspan="2">Area</th><th rowspan="2">Branch</th><th colspan="2">Total Pinjaman</th><th colspan="3">DPD 0<br><small>Target 98%</small></th><th colspan="3">DPD 1–30<br><small>Target 55%</small></th><th colspan="3">DPD 31–60<br><small>Target 13%</small></th><th colspan="2">DPD 61–90<br><small>Nilai +</small></th><th colspan="2">DPD 90+<br><small>Nilai +</small></th><th rowspan="2">PQI Branch</th><th rowspan="2">NOA/BP</th></tr><tr><th>Aktif</th><th>Terbayar</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Aktif</th><th>Terbayar (+)</th><th>Aktif</th><th>Terbayar (+)</th></tr></thead><tbody id="branchTable"></tbody></table></div><p class="notes">Status Branch ditampilkan di kolom pertama. PQI hanya dihitung pada level Branch: 50% × RR DPD 0 + 50% × RR DPD 0–60. Status menggunakan cut-off PQI 91,5%; NOA/BP tinggi &gt;40 dan rendah ≥15. NOA/BP dihitung sementara sebagai Active Loan ÷ jumlah BP unik pada branch. Validasi metrik NOA/BP terhadap definisi resmi sebelum dipakai sebagai klasifikasi final.</p></div>
 <div class="panel" style="margin-top:14px">
  <div class="section-head"><h2>BP Breakdown — Target & Gap per DPD</h2><span class="tag" id="bpCount">0 BP</span></div>
  <div class="desc">Target RR: DPD 0 = 98%, DPD 1–30 = 55%, DPD 31–60 = 13%. DPD 61–90 dan 90+ tidak memiliki target; pembayaran yang masuk dicatat sebagai kontribusi positif. Angka dihitung berdasarkan mitra unik per bucket dan payment_min_1x.</div>
  <div class="table-wrap"><table><thead><tr>
  <th rowspan="2">Area</th><th rowspan="2">Branch</th><th rowspan="2">Nama BP</th><th colspan="2">Total Pinjaman</th>
- <th colspan="4">DPD 0<br><small>Target 98%</small></th><th colspan="4">DPD 1–30<br><small>Target 55%</small></th><th colspan="4">DPD 31–60<br><small>Target 13%</small></th><th colspan="2">DPD 61–90<br><small>Nilai +</small></th><th colspan="2">DPD 90+<br><small>Nilai +</small></th><th rowspan="2">PQI BP*</th>
+ <th colspan="4">DPD 0<br><small>Target 98%</small></th><th colspan="4">DPD 1–30<br><small>Target 55%</small></th><th colspan="4">DPD 31–60<br><small>Target 13%</small></th><th colspan="2">DPD 61–90<br><small>Nilai +</small></th><th colspan="2">DPD 90+<br><small>Nilai +</small></th>
  </tr><tr><th>Aktif</th><th>Terbayar</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Gap</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Gap</th><th>Aktif</th><th>Terbayar</th><th>Rate</th><th>Gap</th><th>Aktif</th><th>Terbayar (+)</th><th>Aktif</th><th>Terbayar (+)</th></tr></thead><tbody id="bpTable"></tbody></table></div>
  <p class="notes">Gap = max(Target Paid − Paid Mitra, 0). Target Paid dibulatkan ke atas. DPD 61–90 dan 90+ ditampilkan sebagai paid mitra positif, tanpa target/gap. Snapshot saat ini hanya mencerminkan periode 25–27 Oktober 2026; tren mingguan memerlukan snapshot historis mingguan.</p>
 </div>
@@ -50,7 +50,29 @@
 <section id="disb" class="hide">
 <div class="cards" id="disbCards"></div>
 <div class="grid2"><div class="panel"><div class="section-head"><h2>Disbursement Status</h2></div><div class="desc">Jumlah pinjaman dan plafon berdasarkan status cair pada file Daily KP.</div><div class="chartbox"><canvas id="disbChart"></canvas></div></div><div class="panel"><div class="section-head"><h2>NTB vs ETB</h2></div><div class="desc">Klasifikasi berdasarkan kategori_cycle di file sumber.</div><div class="chartbox"><canvas id="cycleChart"></canvas></div></div></div>
-<div class="panel"><div class="section-head"><h2>Disbursement by Branch</h2><span class="tag" id="disbBranchCount">0 branch</span></div><div class="table-wrap"><table><thead><tr><th>Regional</th><th>Area</th><th>Branch</th><th>Total Application</th><th>Sudah Cair</th><th>Menunggu</th><th>Gagal</th><th>Plafon Pipeline</th><th>Plafon Sudah Cair</th><th>NTB</th><th>ETB</th></tr></thead><tbody id="disbTable"></tbody></table></div></div>
+<div class="panel"><div class="section-head"><h2>Disbursement by Branch</h2><span class="tag" id="disbBranchCount">0 branch</span></div><div class="table-wrap"><table><thead><tr><th>Regional</th><th>Area</th><th>Branch</th><th>Jumlah BP</th><th>NOA Disbursement/BP</th><th>Total Application</th><th>Sudah Cair</th><th>Menunggu</th><th>Gagal</th><th>Plafon Pipeline</th><th>Plafon Sudah Cair</th><th>NTB</th><th>ETB</th></tr></thead><tbody id="disbTable"></tbody></table></div></div>
+</section>
+<section id="upload" class="hide">
+ <div class="panel">
+  <div class="section-head"><h2>Upload Data Harian</h2><span class="tag">5 file Excel / hari</span></div>
+  <div class="desc">Upload dilakukan melalui repository GitHub agar workflow dapat memproses ulang data dan memperbarui dashboard. Pilih/unggah kelima file ke folder <code>input/</code> pada repository yang sama dengan dashboard.</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px">
+   <div class="filter"><label>1. Portfolio Current</label><strong>current.xlsx</strong><p class="notes">Ganti dengan file current terbaru.</p></div>
+   <div class="filter"><label>2. Daily KP</label><strong>daily_kp.xlsx</strong><p class="notes">Ganti dengan file daily KP terbaru.</p></div>
+   <div class="filter"><label>3. DPD 31–60</label><strong>31-60.xlsx</strong><p class="notes">Ganti dengan file DPD 31–60 terbaru.</p></div>
+   <div class="filter"><label>4. DPD 61–90</label><strong>61-90.xlsx</strong><p class="notes">Ganti dengan file DPD 61–90 terbaru.</p></div>
+   <div class="filter"><label>5. DPD 90+</label><strong>90+.xlsx</strong><p class="notes">Ganti dengan file DPD 90+ terbaru.</p></div>
+  </div>
+  <h3>Prosedur update</h3>
+  <ol style="line-height:1.9;color:var(--muted)">
+   <li>Buka repository GitHub tempat dashboard ini disimpan.</li>
+   <li>Masuk ke folder <code>input/</code>, lalu upload/replace lima file Excel dengan nama persis seperti di atas.</li>
+   <li>Setiap commit ke folder input akan memicu GitHub Actions untuk memproses data dan memperbarui <code>data/data.json</code>.</li>
+   <li>Buka tab <em>Actions</em> di GitHub untuk memastikan proses <em>Daily Portfolio Data Refresh</em> berhasil.</li>
+   <li>Setelah selesai, refresh dashboard. Data akan menampilkan timestamp pembaruan terbaru.</li>
+  </ol>
+  <p class="notes"><strong>Catatan:</strong> menu ini merupakan panduan upload, bukan form yang mengirim file langsung dari browser. GitHub Pages tidak dapat menyimpan file ke repository tanpa autentikasi/backend. Jangan gunakan repository publik untuk file Excel yang berisi data mitra/BP sensitif.</p>
+ </div>
 </section>
 <div class="notes"><strong>Definisi dan batasan:</strong> NOA pada dashboard adalah jumlah loan_id unik; Mitra Unik adalah customer_number unik. Bucket ditentukan dari dpd_new. RR Flag adalah Paid NOA / Active NOA berdasarkan payment_min_1x, bukan otomatis RR resmi. Data pinjaman CLOSED dikecualikan dari kartu Active Loan. Total plafon pipeline bukan seluruhnya realisasi cair. Target RR/PQI belum ditampilkan sebagai pencapaian resmi sampai formula dan target operasional dikonfirmasi. Data dashboard merupakan agregasi; nama mitra, nomor telepon, dan ID personal tidak dipublikasikan.</div>
 <div class="footer">Portfolio Quality Monitoring • Data source: 5 Excel files • GitHub Pages ready</div>

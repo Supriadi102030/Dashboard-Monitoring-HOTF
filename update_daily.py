@@ -11,7 +11,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent
 INPUT = ROOT / "input"
-OUT = ROOT / "Portfolio_Quality_Monitoring_GitHub" / "data" / "data.json"
+OUT = ROOT / "data" / "data.json"
 FILES = {
     "current": "current.xlsx",
     "daily_kp": "daily_kp.xlsx",
@@ -153,6 +153,15 @@ def main():
         row["ntb_loans"]=int(g[cyc.str.contains("NTB")]["loan_id"].nunique())
         row["etb_loans"]=int(g[cyc.str.contains("ETB")]["loan_id"].nunique())
         disb_br.append(row)
+    # Add branch BP count and NOA disbursement per BP using unique BP IDs from current portfolio.
+    bp_lookup={}
+    for x in bps:
+        key=(x["region_name"],x["area_name"],x["branch_name"])
+        bp_lookup.setdefault(key,set()).add(str(x["bp_id"]))
+    for row in disb_br:
+        key=(row["region_name"],row["area_name"],row["branch_name"])
+        row["bp_count"]=len(bp_lookup.get(key,set()))
+        row["noa_disbursement_per_bp"]=row["total_applications"]/row["bp_count"] if row["bp_count"] else 0
     status_summary=[]
     for k in ("gagal_dicairkan","menunggu_pencairan","sudah_cair"):
         q=dk[dk["status_key"]==k]
@@ -164,7 +173,7 @@ def main():
     OUT.write_text(json.dumps(old,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
     print(f"Updated: {OUT}")
     print(f"Active loans: {overall['active_loans']:,}; BP rows: {len(bps):,}; Branches: {len(branches):,}; Disbursement rows: {len(disb_br):,}")
-    print("Now upload the updated data.json to GitHub repository folder data/ and wait for Pages deployment.")
+    print("If run locally, upload the updated data.json to GitHub. In GitHub Actions, the workflow commits it automatically.")
 
 if __name__ == "__main__":
     main()

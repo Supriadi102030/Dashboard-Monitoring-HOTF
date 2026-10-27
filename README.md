@@ -58,3 +58,25 @@ ZIP juga menyertakan `update_daily.py`, `Update_Daily_Data.bat`, `requirements.t
 3. Upload/replace folder `data` (minimal `data.json`) pada repository GitHub yang dipakai GitHub Pages.
 4. Tunggu deployment selesai lalu refresh dashboard.
 Catatan: GitHub Pages bersifat static dan tidak bisa menulis balik ke repository secara langsung dari browser. Karena itu, pembaruan tidak terjadi otomatis hanya dengan membuka dashboard. Script ini membuat proses refresh harian lebih mudah, tetapi pengguna tetap perlu mengunggah hasilnya ke GitHub. Jangan unggah data pribadi/PII ke repository publik.
+
+
+## Koreksi Tampilan Dashboard
+- PQI hanya ditampilkan dan dihitung pada level Branch, tidak pada tabel BP.
+- Kolom Status Branch dipindahkan menjadi kolom pertama pada tabel Branch Performance.
+- Rumus status tetap: Aspiration = PQI > 91,5% dan NOA/BP > 40; Emerging Performer = PQI > 91,5% dan NOA/BP >= 15; Under Perform Sale = PQI > 91,5% dan NOA/BP < 15; Under Perform Collection = PQI <= 91,5% dan NOA/BP >= 15; selainnya Need Turnaround.
+- PQI Branch = 50% × RR DPD 0 + 50% × RR DPD 0–60.
+
+
+## Disbursement by Branch: BP Count dan NOA Disbursement/BP
+- `Jumlah BP` = jumlah BP unik dari data portfolio pada branch tersebut.
+- `NOA Disbursement/BP` = jumlah aplikasi/loan ID unik pada Daily KP ÷ jumlah BP unik.
+- Jika jumlah BP tidak tersedia atau nol, nilai NOA Disbursement/BP ditampilkan 0; cocokkan penamaan branch/area antara file portfolio dan Daily KP.
+
+## Daily upload otomatis ke GitHub Pages
+Repository root harus berisi `index.html`, `app.js`, `data/`, `input/`, `update_daily.py`, `requirements.txt`, dan `.github/workflows/daily-update.yml`.
+1. Upload lima Excel terbaru ke folder `input/` dengan nama persis `current.xlsx`, `daily_kp.xlsx`, `31-60.xlsx`, `61-90.xlsx`, dan `90+.xlsx`. Gunakan repository private karena file sumber dapat mengandung data sensitif.
+2. Commit perubahan. GitHub Actions `Daily Portfolio Data Refresh` akan memproses data dan menulis hasil ke `data/data.json`.
+3. Pastikan repository Settings → Actions → General mengizinkan workflow menulis ke repository (workflow menggunakan `contents: write`).
+4. Cek tab Actions hingga workflow sukses. GitHub Pages kemudian menyajikan `data/data.json` terbaru.
+5. Setiap hari, replace kelima file di `input/` dan commit. Jangan mengganti nama file.
+Catatan: setiap upload/commit ke folder input dapat memicu workflow. Pastikan kelima file berada di folder input sebelum memeriksa hasil workflow. Browser dashboard tidak mengunggah langsung karena GitHub memerlukan autentikasi; menu Upload Data Harian menjelaskan alur upload repository.
